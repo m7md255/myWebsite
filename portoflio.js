@@ -2,7 +2,7 @@
 // Firebase Configuration (ES6 Modules)
 // ============================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBxSX7TZXnNr3JrxA_IuszoQkxKKCHRMPQ",
@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // ============================================
-// Portfolio Management
+// Portfolio Management Variables
 // ============================================
 let wallets = [0, 0, 0, 0, 0, 0];
 let transactions = [];
@@ -36,9 +36,9 @@ async function saveToFirebase() {
             transactions: transactions,
             lastUpdated: serverTimestamp()
         });
-        console.log('تم حفظ البيانات بنجاح');
+        console.log('✅ تم حفظ البيانات بنجاح');
     } catch (error) {
-        console.error('خطأ في حفظ البيانات:', error);
+        console.error('❌ خطأ في حفظ البيانات:', error);
         alert('حدث خطأ في حفظ البيانات');
     }
 }
@@ -52,12 +52,12 @@ async function loadFromFirebase() {
             const data = docSnap.data();
             wallets = data.wallets || [0, 0, 0, 0, 0, 0];
             transactions = data.transactions || [];
-            console.log('تم تحميل البيانات بنجاح');
+            console.log('✅ تم تحميل البيانات بنجاح');
         } else {
-            console.log('لا توجد بيانات محفوظة، سيتم البدء بمحفظة جديدة');
+            console.log('ℹ️ لا توجد بيانات محفوظة، سيتم البدء بمحفظة جديدة');
         }
     } catch (error) {
-        console.error('خطأ في تحميل البيانات:', error);
+        console.error('❌ خطأ في تحميل البيانات:', error);
         alert('حدث خطأ في تحميل البيانات');
     }
 }
@@ -67,14 +67,20 @@ async function loadFromFirebase() {
 // ============================================
 
 function updateWalletDisplay() {
+    // Update sub-wallets
     wallets.forEach((amount, index) => {
         const element = document.getElementById(`wallet${index + 1}`);
         if (element) {
             element.textContent = `${amount.toFixed(2)} ر.س`;
-            element.classList.toggle('negative', amount < 0);
+            if (amount < 0) {
+                element.classList.add('negative');
+            } else {
+                element.classList.remove('negative');
+            }
         }
     });
 
+    // Update main wallet
     const total = wallets.reduce((sum, amount) => sum + amount, 0);
     const mainElement = document.getElementById('mainWalletAmount');
     if (mainElement) {
@@ -115,16 +121,18 @@ function getWalletName(walletNumber) {
 // Transaction Functions
 // ============================================
 
-window.addTransaction = async function() {
+async function addTransaction() {
     const type = document.getElementById('transactionType').value;
     const amount = parseFloat(document.getElementById('transactionAmount').value);
     const walletIndex = parseInt(document.getElementById('transactionWallet').value) - 1;
 
+    // Validation
     if (!amount || amount <= 0) {
         alert('الرجاء إدخال مبلغ صحيح');
         return;
     }
 
+    // Check if total would be negative
     const currentTotal = wallets.reduce((sum, val) => sum + val, 0);
     const newTotal = type === 'deposit' ? currentTotal + amount : currentTotal - amount;
 
@@ -133,12 +141,14 @@ window.addTransaction = async function() {
         return;
     }
 
+    // Update wallet
     if (type === 'deposit') {
         wallets[walletIndex] += amount;
     } else {
         wallets[walletIndex] -= amount;
     }
 
+    // Add to transactions history
     const transaction = {
         type: type,
         amount: amount,
@@ -153,37 +163,43 @@ window.addTransaction = async function() {
     };
     transactions.unshift(transaction);
 
+    // Update display
     updateWalletDisplay();
     updateTransactionHistory();
+
+    // Save to Firebase
     await saveToFirebase();
 
+    // Clear form
     document.getElementById('transactionAmount').value = '';
 }
 
 // ============================================
-// Initialize
+// Expose to Global Scope
 // ============================================
+window.addTransaction = addTransaction;
 
-// تحميل البيانات عند فتح الصفحة لأول مرة
-(async () => {
+// ============================================
+// Initialize on Load
+// ============================================
+async function initializePortfolio() {
     await loadFromFirebase();
     updateWalletDisplay();
     updateTransactionHistory();
-})();
+}
 
-// الاستماع لتغيير الصفحات
-const observer = new MutationObserver(() => {
+// Run initialization
+initializePortfolio();
+
+// Listen for page changes to reload data
+setInterval(() => {
     const portfolioPage = document.getElementById('portfolio');
     if (portfolioPage && portfolioPage.classList.contains('active')) {
-        loadFromFirebase().then(() => {
-            updateWalletDisplay();
-            updateTransactionHistory();
-        });
+        // Optional: reload data when switching to portfolio page
+        // Uncomment if needed:
+        // loadFromFirebase().then(() => {
+        //     updateWalletDisplay();
+        //     updateTransactionHistory();
+        // });
     }
-});
-
-// مراقبة التغييرات على صفحة المحفظة
-const portfolioElement = document.getElementById('portfolio');
-if (portfolioElement) {
-    observer.observe(portfolioElement, { attributes: true, attributeFilter: ['class'] });
-}
+}, 1000);
