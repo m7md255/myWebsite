@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الشخصية</title>
+    <link rel="stylesheet" href="portoflio.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1f4529, #47663b);
+        }
+
+        .sidebar {
+            position: fixed;
+            width: 270px;
+            margin: 16px;
+            border-radius: 16px;
+            background: #fff;
+            height: calc(100vh - 32px);
+            transition: all 0.4s ease;
+            right: 0;
+            z-index: 1001;
+        }
+
+        .sidebar.collapsed {
+            width: 85px;
+        }
+
+        .sidebar .sidebar-header {
+            display: flex;
+            position: relative;
+            padding: 25px 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-header .header-logo img {
+            width: 46px;
+            height: 46px;
+            display: block;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .sidebar-header .toggler {
+            height: 35px;
+            width: 35px;
+            background: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            color: linear-gradient(135deg, #1f4529, #47663b);
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: 0.4s ease;
+        }
+
+        .sidebar-header .sidebar-toggler {
+            /*position: absolute;*/ 
+            left: 20px;
+        }
+
+        .sidebar-header .menu-toggler {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-header .toggler {
+            transform: translate(calc(50% - 17.5px), 65px);
+            left: 50%;
+        }
+
+        .sidebar-header .toggler:hover {
+            transform: scale(1.05);
+        }
+
+        .sidebar.collapsed .sidebar-header .toggler:hover {
+            transform: translate(calc(50% - 17.5px), 65px) scale(1.05);
+        }
+
+        .sidebar-header .toggler span {
+            font-size: 1.75rem;
+            transition: 0.4s ease;
+        }
+
+        .sidebar.collapsed .sidebar-header .toggler span {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-nav .nav-list {
+            list-style: none;
+            display: flex;
+            gap: 4px;
+            padding: 0 15px;
+            flex-direction: column;
+            transform: translateY(15px);
+            transition: 0.4s ease;
+        }
+
+        .sidebar.collapsed .sidebar-nav .primary-nav {
+            transform: translateY(65px);
+        }
+
+        .sidebar-nav .nav-link {
+            color: #1f4529;
+            display: flex;
+            gap: 12px;
+            white-space: nowrap;
+            border-radius: 8px;
+            padding: 12px 15px;
+            align-items: center;
+            text-decoration: none;
+            transition: 0.4s ease;
+            cursor: pointer;
+        }
+
+        .sidebar.collapsed .sidebar-nav .nav-link {
+            border-radius: 12px;
+        }
+
+        .sidebar .sidebar-nav .nav-link .nav-label {
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .sidebar-nav .nav-link .nav-label {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .sidebar-nav .nav-link:hover {
+            color: #fff;
+            background: linear-gradient(135deg, #1f4529, #47663b);
+        }
+
+        .sidebar-nav .nav-link.active {
+            color: #fff;
+            background: linear-gradient(135deg, #1f4529, #47663b);
+        }
+
+        .sidebar-nav .nav-item {
+            position: relative;
+        }
+
+        .sidebar-nav .nav-tooltip {
+            position: absolute;
+            top: -10px;
+            opacity: 0;
+            color: #1f4529;
+            display: none;
+            pointer-events: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            white-space: nowrap;
+            background: #fff;
+            right: calc(100% + 25px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            transition: 0s;
+        }
+
+        .sidebar.collapsed .sidebar-nav .nav-tooltip {
+            display: block;
+        }
+
+        .sidebar-nav .nav-item:hover .nav-tooltip {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(-50%);
+            transition: all 0.4s ease;
+        }
+
+        .sidebar-nav .secondary-nav {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: 302px;
+            padding: 2rem;
+            transition: margin-right 0.4s ease;
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-right: 117px;
+        }
+
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(31, 69, 41, 0.1);
+            min-height: 500px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1f4529, #47663b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .page-description {
+            font-size: 1.1rem;
+            color: #47663b;
+            opacity: 0.8;
+        }
+
+        /* Responsive media query code for small screens */
+        @media (max-width: 1024px) {
+            .sidebar {
+                height: 56px;
+                margin: 13px;
+                overflow-y: hidden;
+                scrollbar-width: none;
+                width: calc(100% - 26px);
+                max-height: calc(100vh - 26px);
+                z-index: 1000;
+            }
+
+            .sidebar.menu-active {
+                overflow-y: auto;
+            }
+
+            .sidebar .sidebar-header {
+                position: sticky;
+                top: 0;
+                z-index: 20;
+                border-radius: 16px;
+                background: #fff;
+                padding: 8px 10px;
+            }
+
+            .sidebar-header .header-logo img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .sidebar-header .sidebar-toggler,
+            .sidebar-nav .nav-item:hover .nav-tooltip {
+                display: none;
+            }
+
+            .sidebar-header .menu-toggler {
+                display: flex;
+                height: 30px;
+                width: 30px;
+            }
+
+            .sidebar-header .menu-toggler span {
+                font-size: 1.3rem;
+            }
+
+            .sidebar .sidebar-nav .nav-list {
+                padding: 0 10px;
+            }
+
+            .sidebar-nav .nav-link {
+                gap: 10px;
+                padding: 10px;
+                font-size: 0.94rem;
+            }
+
+            .sidebar-nav .nav-link .nav-icon {
+                font-size: 1.37rem;
+            }
+
+            .sidebar-nav .secondary-nav {
+                position: relative;
+                bottom: 0;
+                margin: 40px 0 30px;
+            }
+
+            .main-content {
+                margin-right: 0;
+                padding: 1.5rem;
+                padding-top: 5rem;
+            }
+
+            .sidebar.collapsed ~ .main-content {
+                margin-right: 0;
+            }
+
+            .content-card {
+                padding: 2rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <!-- Sidebar header -->
+        <header class="sidebar-header">
+            <a href="#" class="header-logo">
+                <img src="logo.svg" alt="Logo">
+            </a>
+            <button class="toggler sidebar-toggler">
+                <span class="material-symbols-rounded">chevron_right</span>
+            </button>
+            <button class="toggler menu-toggler">
+                <span class="material-symbols-rounded">menu</span>
+            </button>
+        </header>
+        <nav class="sidebar-nav">
+            <!-- Primary top nav -->
+            <ul class="nav-list primary-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" onclick="switchPage('overview')">
+                        <span class="nav-icon material-symbols-rounded">dashboard</span>
+                        <span class="nav-label">نظرة عامة</span>
+                    </a>
+                    <span class="nav-tooltip">نظرة عامة</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchPage('goals')">
+                        <span class="nav-icon material-symbols-rounded">flag</span>
+                        <span class="nav-label">الأهداف</span>
+                    </a>
+                    <span class="nav-tooltip">الأهداف</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchPage('portfolio')">
+                        <span class="nav-icon material-symbols-rounded">account_balance_wallet</span>
+                        <span class="nav-label">المحفظة</span>
+                    </a>
+                    <span class="nav-tooltip">المحفظة</span>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Overview Page -->
+        <div class="page-content active" id="overview">
+            <div class="content-card">
+                <h1 class="page-title">نظرة عامة</h1>
+                <p class="page-description">مرحباً بك في لوحة التحكم الشخصية</p>
+            </div>
+        </div>
+
+        <!-- Goals Page -->
+        <div class="page-content" id="goals">
+            <div class="content-card">
+                <h1 class="page-title">الأهداف</h1>
+                <p class="page-description">هنا يمكنك إدارة أهدافك الشخصية</p>
+            </div>
+        </div>
+
+        <!-- Portfolio Page -->
+         <div class="page-content" id="portfolio">
+            <div class="content-card">
+                <h1 class="page-title">المحفظة</h1>
+                
+                <!-- Main Wallet -->
+                <div class="main-wallet">
+                    <div class="wallet-label">الرصيد الكلي</div>
+                    <div class="wallet-amount" id="mainWalletAmount">0 ر.س</div>
+                </div>
+
+                <!-- Sub Wallets Grid -->
+                <div class="sub-wallets-grid">
+                    <div class="sub-wallet-card">
+                        <div class="sub-wallet-name">المحفظة الأولى</div>
+                        <div class="sub-wallet-amount" id="wallet1">0 ر.س</div>
+                    </div>
+                    <div class="sub-wallet-card">
+                        <div class="sub-wallet-name">المحفظة الثانية</div>
+                        <div class="sub-wallet-amount" id="wallet2">0 ر.س</div>
+                    </div>
+                    <div class="sub-wallet-card">
+                        <div class="sub-wallet-name">المحفظة الثالثة</div>
+                        <div class="sub-wallet-amount" id="wallet3">0 ر.س</div>
+                    </div>
+                    <div class="sub-wallet-card">
+                        <div class="sub-wallet-name">المحفظة الرابعة</div>
+                        <div class="sub-wallet-amount" id="wallet4">0 ر.س</div>
+                    </div>
+                    <div class="sub-wallet-card">
+                        <div class="sub-wallet-name">المحفظة الخامسة</div>
+                        <div class="sub-wallet-amount" id="wallet5">0 ر.س</div>
+                    </div>
+                    <div class="sub-wallet-card">
+                        <div class="sub-wallet-name">المحفظة السادسة</div>
+                        <div class="sub-wallet-amount" id="wallet6">0 ر.س</div>
+                    </div>
+                </div>
+
+                <!-- Transaction Form -->
+                <div class="transaction-form">
+                    <h3 class="form-title">عملية جديدة</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>نوع العملية</label>
+                            <select id="transactionType" class="form-input">
+                                <option value="deposit">إيداع</option>
+                                <option value="withdraw">سحب</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>المبلغ</label>
+                            <input type="number" id="transactionAmount" class="form-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>المحفظة</label>
+                            <select id="transactionWallet" class="form-input">
+                                <option value="1">المحفظة الأولى</option>
+                                <option value="2">المحفظة الثانية</option>
+                                <option value="3">المحفظة الثالثة</option>
+                                <option value="4">المحفظة الرابعة</option>
+                                <option value="5">المحفظة الخامسة</option>
+                                <option value="6">المحفظة السادسة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="submit-btn" onclick="addTransaction()">إضافة العملية</button>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="transaction-history">
+                    <h3 class="history-title">سجل العمليات</h3>
+                    <div id="transactionList" class="transaction-list">
+                        <div class="empty-state">لا توجد عمليات بعد</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script -->
+    <script>
+        const sidebar = document.querySelector(".sidebar");
+        const sidebarToggler = document.querySelector(".sidebar-toggler");
+        const menuToggler = document.querySelector(".menu-toggler");
+
+        let collapsedSidebarHeight = "56px";
+        let fullSidebarHeight = "calc(100vh - 32px)";
+
+        // Toggle sidebar's collapsed state
+        sidebarToggler.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+        });
+
+        // Update sidebar height and menu toggle text
+        const toggleMenu = (isMenuActive) => {
+            sidebar.style.height = isMenuActive ? `${sidebar.scrollHeight}px` : collapsedSidebarHeight;
+            menuToggler.querySelector("span").innerText = isMenuActive ? "close" : "menu";
+        }
+
+        // Toggle menu-active class and adjust height
+        menuToggler.addEventListener("click", () => {
+            toggleMenu(sidebar.classList.toggle("menu-active"));
+        });
+
+        // Switch pages
+        function switchPage(pageName) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Show selected page
+            document.getElementById(pageName).classList.add('active');
+
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Close mobile menu after selection
+            if (window.innerWidth <= 1024) {
+                toggleMenu(false);
+            }
+        }
+
+        // Adjust sidebar height on window resize
+        window.addEventListener("resize", () => {
+            if (window.innerWidth >= 1024) {
+                sidebar.style.height = fullSidebarHeight;
+            } else {
+                sidebar.classList.remove("collapsed");
+                sidebar.style.height = "auto";
+                toggleMenu(sidebar.classList.contains("menu-active"));
+            }
+        });
+    </script>
+    <script type="module" src="portoflio.js"></script>
+</body>
+</html>
