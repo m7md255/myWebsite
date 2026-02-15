@@ -1,5 +1,5 @@
 // ============================================
-// Library Management JavaScript
+// Library Management JavaScript - LATEST VERSION
 // ============================================
 
 class LibraryApp {
@@ -29,6 +29,12 @@ class LibraryApp {
     }
     
     bindEvents() {
+        // Close all modals when switching pages
+        const pageLinks = document.querySelectorAll('.nav-link');
+        pageLinks.forEach(link => {
+            link.addEventListener('click', () => this.closeAllModals());
+        });
+        
         // Tab switching
         document.querySelectorAll('.library-tab').forEach(tab => {
             tab.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
@@ -102,6 +108,12 @@ class LibraryApp {
         // Update content visibility
         document.querySelectorAll('.library-tab-content').forEach(content => {
             content.style.display = content.id === `${tabName}Tab` ? 'block' : 'none';
+        });
+    }
+    
+    closeAllModals() {
+        document.querySelectorAll('.library-app .modal-backdrop').forEach(backdrop => {
+            backdrop.classList.remove('active');
         });
     }
     
@@ -609,16 +621,19 @@ class LibraryApp {
         const modal = document.getElementById('categoryModal');
         const nameInput = document.getElementById('categoryName');
         const colorInput = document.getElementById('categoryColor');
+        const colorPreview = document.getElementById('colorPreview');
         
         if (!modal) return;
         
         if (categoryId) {
             nameInput.value = name;
             colorInput.value = color;
+            if (colorPreview) colorPreview.style.backgroundColor = color;
             modal.dataset.categoryId = categoryId;
         } else {
             nameInput.value = '';
             colorInput.value = '#007aff';
+            if (colorPreview) colorPreview.style.backgroundColor = '#007aff';
             delete modal.dataset.categoryId;
         }
         
