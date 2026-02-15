@@ -6,6 +6,35 @@
     font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
 
+/* Modals standalone — خارج wrapper */
+#bookModal.modal-backdrop,
+#categoryModal.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+    direction: rtl;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+#bookModal.modal-backdrop.active,
+#categoryModal.modal-backdrop.active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* ========== HEADER & NAVIGATION ========== */
 
 .library-app .library-header {
