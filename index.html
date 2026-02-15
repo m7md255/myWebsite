@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم الشخصية</title>
     <link rel="stylesheet" href="portoflio.css">
+    <link rel="stylesheet" href="library.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -367,6 +368,13 @@
                     </a>
                     <span class="nav-tooltip">المحفظة</span>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchPage('library')">
+                        <span class="nav-icon material-symbols-rounded">library_books</span>
+                        <span class="nav-label">المكتبة</span>
+                    </a>
+                    <span class="nav-tooltip">المكتبة</span>
+                </li>
             </ul>
         </nav>
     </aside>
@@ -469,6 +477,292 @@
                 </div>
             </div>
         </div>
+        <!-- Library Page -->
+        <!-- ============================================
+     Library Page - يضاف داخل <main class="main-content">
+     ============================================ -->
+
+<div class="page-content" id="library">
+    <div class="content-card">
+        <div class="library-app">
+            <!-- Header -->
+            <div class="library-header">
+                <h1>المكتبة الشخصية</h1>
+                <button class="btn-add" id="addBookBtn">
+                    <span class="material-symbols-rounded" style="font-size: 1.3rem;">add</span>
+                    إضافة كتاب
+                </button>
+            </div>
+            
+            <!-- Tabs -->
+            <div class="library-tabs">
+                <button class="library-tab active" data-tab="books">الكتب</button>
+                <button class="library-tab" data-tab="statistics">الإحصائيات</button>
+                <button class="library-tab" data-tab="categories">التصنيفات</button>
+            </div>
+            
+            <!-- ========== BOOKS TAB ========== -->
+            <div id="booksTab" class="library-tab-content">
+                <!-- Search & Filters -->
+                <div class="search-bar">
+                    <input type="text" 
+                           id="bookSearch" 
+                           class="search-input" 
+                           placeholder="ابحث عن عنوان أو مؤلف...">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">جميع الحالات</option>
+                        <option value="لم أبدأ">لم أبدأ</option>
+                        <option value="قيد القراءة">قيد القراءة</option>
+                        <option value="منتهي">منتهي</option>
+                        <option value="متوقف">متوقف</option>
+                    </select>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="">جميع التصنيفات</option>
+                    </select>
+                </div>
+                
+                <!-- Books Grid -->
+                <div id="booksGrid" class="books-grid">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📚</div>
+                            <p class="empty-state-text">جاري التحميل...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========== STATISTICS TAB ========== -->
+            <div id="statisticsTab" class="library-tab-content" style="display: none;">
+                <div id="statisticsGrid" class="statistics-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">جاري التحميل...</div>
+                        <div class="stat-value">-</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========== CATEGORIES TAB ========== -->
+            <div id="categoriesTab" class="library-tab-content" style="display: none;">
+                <div class="categories-section">
+                    <div class="categories-header">
+                        <h3 class="categories-title">التصنيفات</h3>
+                        <button class="btn-add" id="addCategoryBtn">
+                            <span class="material-symbols-rounded" style="font-size: 1.3rem;">add</span>
+                            إضافة تصنيف
+                        </button>
+                    </div>
+                    <div id="categoriesList" class="category-list">
+                        <div style="grid-column: 1 / -1;">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">🏷️</div>
+                                <p class="empty-state-text">جاري التحميل...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+     MODALS
+     ============================================ -->
+
+<!-- Book Modal -->
+<div id="bookModal" class="library-app modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title" id="bookModalTitle">إضافة كتاب جديد</h2>
+            <button class="modal-close" title="إغلاق">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+        
+        <form id="bookForm">
+            <div class="modal-body">
+                <!-- Title & Author -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="bookTitle">العنوان *</label>
+                        <input type="text" id="bookTitle" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookAuthor">المؤلف *</label>
+                        <input type="text" id="bookAuthor" class="form-input" required>
+                    </div>
+                </div>
+                
+                <!-- ISBN & Publisher -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="bookIsbn">ISBN</label>
+                        <input type="text" id="bookIsbn" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookPublisher">دار النشر</label>
+                        <input type="text" id="bookPublisher" class="form-input">
+                    </div>
+                </div>
+                
+                <!-- Publish Year & Pages -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="bookPublishYear">سنة النشر</label>
+                        <input type="number" id="bookPublishYear" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookTotalPages">عدد الصفحات</label>
+                        <input type="number" id="bookTotalPages" class="form-input" min="0">
+                    </div>
+                </div>
+                
+                <!-- Current Page & Language -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="bookCurrentPage">الصفحة الحالية</label>
+                        <input type="number" id="bookCurrentPage" class="form-input" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookLanguage">اللغة</label>
+                        <select id="bookLanguage" class="form-select">
+                            <option value="العربية">العربية</option>
+                            <option value="الإنجليزية">الإنجليزية</option>
+                            <option value="الفرنسية">الفرنسية</option>
+                            <option value="أخرى">أخرى</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Location & Status -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="bookLocation">الموقع (رف/غرفة)</label>
+                        <input type="text" id="bookLocation" class="form-input" placeholder="مثال: رف 1، الغرفة الرئيسية">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookStatus">حالة القراءة</label>
+                        <select id="bookStatus" class="form-select">
+                            <option value="لم أبدأ">لم أبدأ</option>
+                            <option value="قيد القراءة">قيد القراءة</option>
+                            <option value="منتهي">منتهي</option>
+                            <option value="متوقف">متوقف</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Dates -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="bookStartDate">تاريخ البداية</label>
+                        <input type="date" id="bookStartDate" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="bookEndDate">تاريخ الانتهاء</label>
+                        <input type="date" id="bookEndDate" class="form-input">
+                    </div>
+                </div>
+                
+                <!-- Rating -->
+                <div class="form-group">
+                    <label class="form-label">التقييم</label>
+                    <div class="rating-input">
+                        <span class="rating-star" data-rating="5">★</span>
+                        <span class="rating-star" data-rating="4">★</span>
+                        <span class="rating-star" data-rating="3">★</span>
+                        <span class="rating-star" data-rating="2">★</span>
+                        <span class="rating-star" data-rating="1">★</span>
+                    </div>
+                </div>
+                
+                <!-- Categories -->
+                <div class="form-group">
+                    <label class="form-label">التصنيفات</label>
+                    <div class="checkbox-group" id="categoryCheckboxes">
+                        <p style="color: #999;">جاري التحميل...</p>
+                    </div>
+                </div>
+                
+                <!-- Notes -->
+                <div class="form-group">
+                    <label class="form-label" for="bookNotes">ملاحظات شخصية</label>
+                    <textarea id="bookNotes" class="form-textarea" placeholder="اكتب ملاحظاتك عن الكتاب..."></textarea>
+                </div>
+                
+                <!-- Favorite -->
+                <div class="form-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="bookFavorite" class="checkbox-input">
+                        <label for="bookFavorite" class="checkbox-label">إضافة للمفضلة</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close" onclick="document.getElementById('bookModal').classList.remove('active')">إلغاء</button>
+                <button type="submit" class="btn btn-primary">حفظ الكتاب</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Category Modal -->
+<div id="categoryModal" class="library-app modal-backdrop">
+    <div class="modal" style="max-width: 400px;">
+        <div class="modal-header">
+            <h2 class="modal-title">إضافة تصنيف جديد</h2>
+            <button class="modal-close" title="إغلاق">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+        
+        <form id="categoryForm">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="categoryName">اسم التصنيف</label>
+                    <input type="text" id="categoryName" class="form-input" required placeholder="مثال: خيال علمي">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="categoryColor">اللون</label>
+                    <div class="color-picker-group">
+                        <input type="color" id="categoryColor" class="color-picker-input" value="#007aff">
+                        <span id="colorPreview" style="display: inline-block; width: 40px; height: 40px; border-radius: 8px; background-color: #007aff;"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close" onclick="document.getElementById('categoryModal').classList.remove('active')">إلغاء</button>
+                <button type="submit" class="btn btn-primary">حفظ التصنيف</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script for Rating Stars & Color Picker -->
+<script>
+    // Bind rating stars
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.addEventListener('click', (e) => {
+                const rating = parseInt(e.target.dataset.rating);
+                document.querySelectorAll('.rating-star').forEach(s => {
+                    s.classList.toggle('filled', parseInt(s.dataset.rating) >= rating);
+                });
+            });
+        });
+        
+        // Bind color picker
+        const colorInput = document.getElementById('categoryColor');
+        if (colorInput) {
+            colorInput.addEventListener('input', (e) => {
+                document.getElementById('colorPreview').style.backgroundColor = e.target.value;
+            });
+        }
+    });
+</script>
     </main>
 
     <!-- Script -->
@@ -528,5 +822,6 @@
         });
     </script>
     <script type="module" src="portoflio.js"></script>
+    <script src="library.js"></script>
 </body>
 </html>
