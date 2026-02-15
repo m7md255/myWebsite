@@ -456,16 +456,22 @@
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px);
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2000;
     padding: 1rem;
     direction: rtl;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
 }
 
 .library-app .modal-backdrop.active {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .library-app .modal {
