@@ -1,0 +1,756 @@
+/* ============================================
+   Library Styles - محاطة بـ .library-app
+   ============================================ */
+
+.library-app {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+/* ========== HEADER & NAVIGATION ========== */
+
+.library-app .library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.library-app .library-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1f4529, #47663b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.library-app .library-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 2px solid rgba(31, 69, 41, 0.1);
+    margin-bottom: 2rem;
+}
+
+.library-app .library-tab {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #999;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+.library-app .library-tab:hover {
+    color: #47663b;
+}
+
+.library-app .library-tab.active {
+    color: #1f4529;
+    border-bottom-color: #47663b;
+}
+
+/* ========== STATISTICS SECTION ========== */
+
+.library-app .statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.library-app .stat-card {
+    background: rgba(245, 241, 232, 0.5);
+    border: 2px solid rgba(31, 69, 41, 0.1);
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.library-app .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(31, 69, 41, 0.15);
+    border-color: #47663b;
+}
+
+.library-app .stat-label {
+    font-size: 0.9rem;
+    color: #47663b;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.library-app .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f4529;
+}
+
+/* ========== SEARCH & FILTERS ========== */
+
+.library-app .search-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.library-app .search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(31, 69, 41, 0.2);
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.library-app .search-input:focus {
+    outline: none;
+    border-color: #47663b;
+    box-shadow: 0 0 0 3px rgba(71, 102, 59, 0.1);
+}
+
+.library-app .filter-select {
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(31, 69, 41, 0.2);
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 1rem;
+    background: white;
+    color: #1f4529;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 150px;
+}
+
+.library-app .filter-select:focus {
+    outline: none;
+    border-color: #47663b;
+    box-shadow: 0 0 0 3px rgba(71, 102, 59, 0.1);
+}
+
+/* ========== BOOKS GRID ========== */
+
+.library-app .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.library-app .book-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(31, 69, 41, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.library-app .book-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(31, 69, 41, 0.15);
+}
+
+.library-app .book-card-header {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(31, 69, 41, 0.05), rgba(71, 102, 59, 0.05));
+    border-bottom: 1px solid rgba(31, 69, 41, 0.1);
+    position: relative;
+}
+
+.library-app .book-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1f4529;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+}
+
+.library-app .book-author {
+    font-size: 0.9rem;
+    color: #47663b;
+    margin: 0;
+    font-weight: 500;
+}
+
+.library-app .book-favorite {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.library-app .book-favorite.active {
+    color: #fbbf24;
+    transform: scale(1.2);
+}
+
+.library-app .book-card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.library-app .book-status {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.library-app .book-status.not-started {
+    background: #e5e7eb;
+    color: #4b5563;
+}
+
+.library-app .book-status.reading {
+    background: rgba(71, 102, 59, 0.1);
+    color: #47663b;
+}
+
+.library-app .book-status.completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.library-app .book-status.paused {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.library-app .book-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.library-app .book-category-tag {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+}
+
+.library-app .book-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.library-app .book-info-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.library-app .progress-bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(31, 69, 41, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.library-app .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #1f4529, #47663b);
+    transition: width 0.3s ease;
+}
+
+.library-app .book-rating {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.library-app .star {
+    font-size: 1.2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.library-app .star.filled {
+    color: #fbbf24;
+}
+
+.library-app .book-card-footer {
+    padding: 1rem 1.5rem;
+    background: rgba(245, 241, 232, 0.3);
+    border-top: 1px solid rgba(31, 69, 41, 0.1);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.library-app .book-btn {
+    flex: 1;
+    padding: 0.6rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+.library-app .book-btn-edit {
+    background: linear-gradient(135deg, #1f4529, #47663b);
+    color: white;
+}
+
+.library-app .book-btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(31, 69, 41, 0.3);
+}
+
+.library-app .book-btn-delete {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.library-app .book-btn-delete:hover {
+    background: #fecaca;
+    transform: translateY(-2px);
+}
+
+.library-app .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #999;
+}
+
+.library-app .empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.library-app .empty-state-text {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* ========== CATEGORIES SECTION ========== */
+
+.library-app .categories-section {
+    background: rgba(245, 241, 232, 0.3);
+    padding: 2rem;
+    border-radius: 16px;
+}
+
+.library-app .categories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.library-app .categories-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1f4529;
+}
+
+.library-app .category-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.library-app .category-item {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.library-app .category-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(31, 69, 41, 0.1);
+}
+
+.library-app .category-color-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-left: 0.75rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.library-app .category-name {
+    flex: 1;
+    font-weight: 500;
+    color: #1f4529;
+}
+
+.library-app .category-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.library-app .category-btn {
+    padding: 0.4rem 0.8rem;
+    background: none;
+    border: 1px solid rgba(31, 69, 41, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 500;
+    color: #1f4529;
+}
+
+.library-app .category-btn:hover {
+    background: linear-gradient(135deg, #1f4529, #47663b);
+    color: white;
+    border-color: #47663b;
+}
+
+.library-app .category-btn-delete {
+    border-color: #dc2626;
+    color: #991b1b;
+}
+
+.library-app .category-btn-delete:hover {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+}
+
+/* ========== MODAL STYLES ========== */
+
+.library-app .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+    direction: rtl;
+}
+
+.library-app .modal-backdrop.active {
+    display: flex;
+}
+
+.library-app .modal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.library-app .modal-header {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(31, 69, 41, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.library-app .modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f4529;
+    margin: 0;
+}
+
+.library-app .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s ease;
+}
+
+.library-app .modal-close:hover {
+    color: #1f4529;
+}
+
+.library-app .modal-body {
+    padding: 2rem;
+}
+
+.library-app .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.library-app .form-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1f4529;
+}
+
+.library-app .form-input,
+.library-app .form-select,
+.library-app .form-textarea {
+    padding: 0.75rem;
+    border: 2px solid rgba(31, 69, 41, 0.2);
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 1rem;
+    color: #1f4529;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.library-app .form-input:focus,
+.library-app .form-select:focus,
+.library-app .form-textarea:focus {
+    outline: none;
+    border-color: #47663b;
+    box-shadow: 0 0 0 3px rgba(71, 102, 59, 0.1);
+}
+
+.library-app .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.library-app .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 0;
+}
+
+.library-app .form-row .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.library-app .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.library-app .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.library-app .checkbox-input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #47663b;
+}
+
+.library-app .checkbox-label {
+    font-size: 0.95rem;
+    color: #1f4529;
+    cursor: pointer;
+    margin: 0;
+}
+
+.library-app .color-picker-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.library-app .color-picker-input {
+    width: 50px;
+    height: 40px;
+    border: 2px solid rgba(31, 69, 41, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.library-app .rating-input {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.library-app .rating-star {
+    font-size: 1.5rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.library-app .rating-star:hover,
+.library-app .rating-star.filled {
+    color: #fbbf24;
+}
+
+.library-app .modal-footer {
+    padding: 2rem;
+    border-top: 1px solid rgba(31, 69, 41, 0.1);
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.library-app .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.library-app .btn-primary {
+    background: linear-gradient(135deg, #1f4529, #47663b);
+    color: white;
+}
+
+.library-app .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(31, 69, 41, 0.3);
+}
+
+.library-app .btn-primary:active {
+    transform: translateY(0);
+}
+
+.library-app .btn-secondary {
+    background: rgba(245, 241, 232, 0.5);
+    color: #1f4529;
+    border: 2px solid rgba(31, 69, 41, 0.2);
+}
+
+.library-app .btn-secondary:hover {
+    background: rgba(245, 241, 232, 1);
+    border-color: #47663b;
+}
+
+.library-app .btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #1f4529, #47663b);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.library-app .btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(31, 69, 41, 0.3);
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+@media (max-width: 768px) {
+    .library-app .library-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .library-app .statistics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .library-app .books-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .library-app .search-bar {
+        flex-direction: column;
+    }
+    
+    .library-app .search-input,
+    .library-app .filter-select {
+        width: 100%;
+    }
+    
+    .library-app .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .library-app .modal-footer {
+        flex-direction: column-reverse;
+    }
+    
+    .library-app .modal-footer .btn {
+        width: 100%;
+    }
+    
+    .library-app .category-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .library-app .statistics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .library-app .modal {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 12px 12px 0 0;
+    }
+    
+    .library-app .library-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        margin-bottom: 1rem;
+    }
+}
