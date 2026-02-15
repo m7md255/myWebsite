@@ -428,9 +428,9 @@ class LibraryApp {
         document.getElementById('bookNotes').value = book.notes || '';
         document.getElementById('bookFavorite').checked = book.favorite == 1;
         
-        // Set rating
-        document.querySelectorAll('.rating-star').forEach((star, index) => {
-            star.classList.toggle('filled', index < book.rating);
+        // Set rating — النجوم مرتبة من 5 إلى 1 لذا نستخدم data-rating
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.classList.toggle('filled', parseInt(star.dataset.rating) <= book.rating);
         });
         
         // Check categories
@@ -589,11 +589,27 @@ class LibraryApp {
                     <span class="category-name">${this.escapeHtml(category.name)}</span>
                 </div>
                 <div class="category-actions">
-                    <button class="category-btn" onclick="libraryApp.openCategoryModal('${category.id}', '${this.escapeHtml(category.name)}', '${category.color}')">تعديل</button>
-                    <button class="category-btn category-btn-delete" onclick="libraryApp.deleteCategory('${category.id}')">حذف</button>
+                    <button class="category-btn category-btn-edit"
+                        data-id="${category.id}"
+                        data-name="${this.escapeHtml(category.name)}"
+                        data-color="${category.color}">تعديل</button>
+                    <button class="category-btn category-btn-delete"
+                        data-id="${category.id}">حذف</button>
                 </div>
             </div>
         `).join('');
+
+        // Bind category buttons via event delegation
+        container.querySelectorAll('.category-btn-edit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.libraryApp.openCategoryModal(btn.dataset.id, btn.dataset.name, btn.dataset.color);
+            });
+        });
+        container.querySelectorAll('.category-btn-delete').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.libraryApp.deleteCategory(btn.dataset.id);
+            });
+        });
     }
     
     updateCategorySelects() {
@@ -718,7 +734,6 @@ class LibraryApp {
 }
 
 // Initialize when DOM is ready
-let libraryApp;
 document.addEventListener('DOMContentLoaded', () => {
-    libraryApp = new LibraryApp();
+    window.libraryApp = new LibraryApp();
 });
